@@ -1,8 +1,13 @@
+import com.android.build.api.dsl.ApplicationBuildType
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+val localProperties = gradleLocalProperties(rootDir, providers)
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
 }
 
 android {
@@ -22,13 +27,33 @@ android {
         }
     }
 
+    fun buildConfigFields(buildType: ApplicationBuildType) {
+        buildType.apply {
+            buildConfigField(
+                "String",
+                "CLIENT_ID",
+                localProperties.getProperty("client_id") ?: ""
+            )
+            buildConfigField(
+                "String",
+                "CLIENT_SECRET",
+                localProperties.getProperty("client_secret") ?: ""
+            )
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigFields(this)
+        }
+        debug {
+            isMinifyEnabled = false
+            buildConfigFields(this)
         }
     }
     compileOptions {
@@ -40,6 +65,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.13"
@@ -88,7 +114,19 @@ dependencies {
     implementation(libs.coil.compose)
 
     // koin
+    implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+
+    // ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    // arrow
+    implementation(libs.arrow.core)
 
     // rebugger
     debugImplementation(libs.rebugger)
