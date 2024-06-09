@@ -35,7 +35,7 @@ val appModule = module {
                             Log.d("Ktor", message)
                         }
                     }
-                    level = LogLevel.ALL
+                    level = LogLevel.BODY
                 }
             }
 

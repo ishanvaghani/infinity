@@ -3,6 +3,7 @@ package com.music.infinity.data.remote
 import arrow.core.Either
 import com.music.infinity.BuildConfig
 import com.music.infinity.common.encodeBase64
+import com.music.infinity.common.isSuccess
 import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumWrapperDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
@@ -30,10 +31,7 @@ class SpotifyApi(private val client: HttpClient) {
                 val clientToken =
                     "${BuildConfig.CLIENT_ID}:${BuildConfig.CLIENT_SECRET}".encodeBase64()
                 headers {
-                    append(
-                        HttpHeaders.Authorization,
-                        "Basic $clientToken"
-                    )
+                    append(HttpHeaders.Authorization, "Basic $clientToken")
                     append(HttpHeaders.ContentType, "application/x-www-form-urlencoded")
                 }
                 setBody("grant_type=client_credentials")
@@ -55,9 +53,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
-            val albums = albumWrapper.albumDtos.map { it.toAlbum() }
-            Either.Right(albums)
+            if (response.isSuccess()) {
+                val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
+                val albums = albumWrapper.albumDtos.map { it.toAlbum() }
+                Either.Right(albums)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -70,9 +72,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
-            val albums = albumWrapper.albumDtos.map { it.toAlbum() }
-            Either.Right(albums)
+            if (response.isSuccess()) {
+                val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
+                val albums = albumWrapper.albumDtos.map { it.toAlbum() }
+                Either.Right(albums)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
