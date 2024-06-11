@@ -14,6 +14,7 @@ ktor = "2.3.11"
 lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
+logbackClassic = "1.2.6"
 paging = "3.3.0"
 rebugger = "1.0.0-rc03"
 uiTextGoogleFonts = "1.6.7"
@@ -47,6 +48,7 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
 rebugger = { module = "io.github.theapache64:rebugger", version.ref = "rebugger" }
 
 [plugins]
