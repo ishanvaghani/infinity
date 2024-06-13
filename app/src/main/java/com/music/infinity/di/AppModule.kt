@@ -10,8 +10,6 @@ import com.music.infinity.data.repository.AlbumRepositoryImpl
 import com.music.infinity.domain.repository.AlbumRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.engine.cio.endpoint
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
