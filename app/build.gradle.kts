@@ -122,6 +122,9 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
 
+    // logging
+    implementation (libs.logback.classic)
+
     // arrow
     implementation(libs.arrow.core)
 

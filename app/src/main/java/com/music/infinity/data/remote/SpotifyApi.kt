@@ -5,11 +5,12 @@ import com.music.infinity.BuildConfig
 import com.music.infinity.common.encodeBase64
 import com.music.infinity.common.isSuccess
 import com.music.infinity.common.toCustomExceptions
-import com.music.infinity.data.remote.dto.AlbumWrapperDto
+import com.music.infinity.data.remote.dto.AlbumDetailDto
+import com.music.infinity.data.remote.dto.AlbumListDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
+import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.BaseResponse
 import com.music.infinity.data.remote.model.Failure
-import com.music.infinity.domain.model.Album
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -18,6 +19,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
+import io.ktor.http.path
 
 class SpotifyApi(private val client: HttpClient) {
 
@@ -42,7 +44,7 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
-    suspend fun getNewReleasesAlbums(offset: Int): Either<Failure, List<Album>> {
+    suspend fun getNewReleasesAlbums(offset: Int): Either<Failure, AlbumListDto> {
         return try {
             val response = client.get(HttpRoutes.NEW_RELEASES_ALBUMS) {
                 url {
@@ -54,9 +56,8 @@ class SpotifyApi(private val client: HttpClient) {
                 }
             }
             if (response.isSuccess()) {
-                val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
-                val albums = albumWrapper.albumDtos.map { it.toAlbum() }
-                Either.Right(albums)
+                val albumWrapper = response.body<BaseResponse<AlbumListDto>>().albums!!
+                Either.Right(albumWrapper)
             } else {
                 Either.Left(response.status.toCustomExceptions())
             }
@@ -65,17 +66,42 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
-    suspend fun getGenres(): Either<Failure, List<Album>> {
+    suspend fun getAlbum(id: String): Either<Failure, AlbumDetailDto> {
         return try {
-            val response = client.get(HttpRoutes.GENRES) {
+            val response = client.get(HttpRoutes.ALBUMS) {
+                url {
+                    path(id)
+                }
                 headers {
                     appendAll(NetworkConstant.headers())
                 }
             }
             if (response.isSuccess()) {
-                val albumWrapper = response.body<BaseResponse<AlbumWrapperDto>>().albums!!
-                val albums = albumWrapper.albumDtos.map { it.toAlbum() }
-                Either.Right(albums)
+                val albumDetail = response.body<AlbumDetailDto>()
+                Either.Right(albumDetail)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getAlbumTracks(id: String, offset: Int): Either<Failure, TrackListDto> {
+        return try {
+            val response = client.get(HttpRoutes.ALBUMS) {
+                url {
+                    path(id, "tracks")
+                    parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
+                    parameters.append("offset", "$offset")
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            if (response.isSuccess()) {
+                val trackList = response.body<TrackListDto>()
+                Either.Right(trackList)
             } else {
                 Either.Left(response.status.toCustomExceptions())
             }

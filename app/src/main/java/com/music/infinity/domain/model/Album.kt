@@ -4,7 +4,7 @@ import com.music.infinity.common.model.Image
 
 data class Album(
     val albumType: String,
-    val artistDtos: List<Artist>,
+    val artists: List<Artist>,
     val id: String,
     val images: List<Image>,
     val name: String,
