@@ -8,15 +8,12 @@ import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumDetailDto
 import com.music.infinity.data.remote.dto.AlbumListDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
-import com.music.infinity.data.remote.dto.CategoriesWrapperDto
+import com.music.infinity.data.remote.dto.CategoriesListDto
+import com.music.infinity.data.remote.dto.CategoryDto
 import com.music.infinity.data.remote.dto.GenresDto
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
-import com.music.infinity.data.remote.model.BaseResponse
 import com.music.infinity.data.remote.model.Failure
-import com.music.infinity.domain.model.Album
-import com.music.infinity.domain.model.Categories
-import com.music.infinity.domain.model.Genre
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -140,7 +137,7 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
-    suspend fun getCategories(offset: Int): Either<Failure, List<Categories>> {
+    suspend fun getCategories(offset: Int): Either<Failure, CategoriesListDto> {
         return try {
             val response = client.get(HttpRoutes.CATEGORIES) {
                 url {
@@ -152,24 +149,39 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val categoriesWrapper = response.body<BaseResponse<CategoriesWrapperDto>>().albums!!
-            val albums = categoriesWrapper.categoriesDto.map { it.toCategories() }
-            Either.Right(albums)
+            val categoriesList = response.body<CategoriesListDto>()
+            Either.Right(categoriesList)
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
     }
 
-    suspend fun getGenres(): Either<Failure, Genre> {
+    suspend fun getCategory(id: String): Either<Failure, CategoryDto> {
+        return try {
+            val response = client.get(HttpRoutes.CATEGORIES) {
+                url {
+                    path(id)
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val categoriesList = response.body<CategoryDto>()
+            Either.Right(categoriesList)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getGenres(): Either<Failure, GenresDto> {
         return try {
             val response = client.get(HttpRoutes.GENRES) {
                 headers {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val albumWrapper = response.body<BaseResponse<GenresDto>>().albums!!
-            val albums = albumWrapper.toGenre()
-            Either.Right(albums)
+            val genres = response.body<GenresDto>()
+            Either.Right(genres)
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }

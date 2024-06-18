@@ -1,11 +1,10 @@
 package com.music.infinity.data.remote.dto
 
 import com.music.infinity.common.model.Image
-import com.music.infinity.domain.model.Album
-import com.music.infinity.domain.model.Categories
+import com.music.infinity.domain.model.Category
 import kotlinx.serialization.SerialName
 
-data class CategoriesDto(
+data class CategoryDto(
     @SerialName("href")
     val href: String,
     @SerialName("icons")
@@ -15,8 +14,8 @@ data class CategoriesDto(
     @SerialName("name")
     val name: String,
 ) {
-    fun toCategories(): Categories {
-        return Categories(
+    fun toCategory(): Category {
+        return Category(
             href, icons, id, name
         )
     }
