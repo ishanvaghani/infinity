@@ -8,6 +8,9 @@ import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumDetailDto
 import com.music.infinity.data.remote.dto.AlbumListDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
+import com.music.infinity.data.remote.dto.CategoriesListDto
+import com.music.infinity.data.remote.dto.CategoryDto
+import com.music.infinity.data.remote.dto.GenresDto
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.Failure
@@ -129,6 +132,56 @@ class SpotifyApi(private val client: HttpClient) {
             } else {
                 Either.Left(response.status.toCustomExceptions())
             }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getCategories(offset: Int): Either<Failure, CategoriesListDto> {
+        return try {
+            val response = client.get(HttpRoutes.CATEGORIES) {
+                url {
+                    parameters.append("locale", NetworkConstant.LOCALE)
+                    parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
+                    parameters.append("offset", "$offset")
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val categoriesList = response.body<CategoriesListDto>()
+            Either.Right(categoriesList)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getCategory(id: String): Either<Failure, CategoryDto> {
+        return try {
+            val response = client.get(HttpRoutes.CATEGORIES) {
+                url {
+                    path(id)
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val categoriesList = response.body<CategoryDto>()
+            Either.Right(categoriesList)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getGenres(): Either<Failure, GenresDto> {
+        return try {
+            val response = client.get(HttpRoutes.GENRES) {
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val genres = response.body<GenresDto>()
+            Either.Right(genres)
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
