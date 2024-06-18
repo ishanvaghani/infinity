@@ -8,8 +8,8 @@ import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumDetailDto
 import com.music.infinity.data.remote.dto.AlbumListDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
+import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
-import com.music.infinity.data.remote.model.BaseResponse
 import com.music.infinity.data.remote.model.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -56,7 +56,7 @@ class SpotifyApi(private val client: HttpClient) {
                 }
             }
             if (response.isSuccess()) {
-                val albumWrapper = response.body<BaseResponse<AlbumListDto>>().albums!!
+                val albumWrapper = response.body<AlbumListDto>()
                 Either.Right(albumWrapper)
             } else {
                 Either.Left(response.status.toCustomExceptions())
@@ -101,6 +101,30 @@ class SpotifyApi(private val client: HttpClient) {
             }
             if (response.isSuccess()) {
                 val trackList = response.body<TrackListDto>()
+                Either.Right(trackList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun search(query: String, type: String, offset: Int): Either<Failure, SearchListDto> {
+        return try {
+            val response = client.get(HttpRoutes.SEARCH) {
+                url {
+                    parameters.append("q", query)
+                    parameters.append("type", type)
+                    parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
+                    parameters.append("offset", "$offset")
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            if (response.isSuccess()) {
+                val trackList = response.body<SearchListDto>()
                 Either.Right(trackList)
             } else {
                 Either.Left(response.status.toCustomExceptions())
