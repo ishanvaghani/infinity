@@ -1,22 +1,27 @@
 package com.music.infinity.data.remote.dto
 
+import com.music.infinity.domain.model.ArtistList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AlbumWrapperDto(
-    @SerialName("href")
-    val href: String,
+data class ArtistListDto(
     @SerialName("items")
-    val albumDtos: List<AlbumDto>,
+    val artists: List<ArtistDto>,
     @SerialName("limit")
     val limit: Int,
-    @SerialName("next")
-    val next: String?,
     @SerialName("offset")
     val offset: Int,
-    @SerialName("previous")
-    val previous: String?,
     @SerialName("total")
     val total: Int
-)
+) {
+
+    fun toArtistList(): ArtistList {
+        return ArtistList(
+            artists.map { it.toArtist() },
+            limit,
+            offset,
+            total
+        )
+    }
+}
