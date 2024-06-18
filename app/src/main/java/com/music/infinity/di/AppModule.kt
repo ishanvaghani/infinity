@@ -6,7 +6,9 @@ import com.music.infinity.data.remote.NetworkConstant
 import com.music.infinity.data.remote.NetworkManager
 import com.music.infinity.data.remote.SpotifyApi
 import com.music.infinity.data.repository.AlbumRepositoryImpl
+import com.music.infinity.data.repository.SearchRepositoryImpl
 import com.music.infinity.domain.repository.AlbumRepository
+import com.music.infinity.domain.repository.SearchRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -69,6 +71,14 @@ val appModule = module {
 
     single<AlbumRepository> {
         AlbumRepositoryImpl(get(), get())
+    }
+
+    single {
+        AlbumUseCase(get())
+    }
+
+    single<SearchRepository> {
+        SearchRepositoryImpl(get(), get())
     }
 
     single {
