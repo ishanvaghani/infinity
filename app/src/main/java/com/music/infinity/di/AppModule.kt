@@ -6,14 +6,18 @@ import com.music.infinity.data.remote.NetworkConstant
 import com.music.infinity.data.remote.NetworkManager
 import com.music.infinity.data.remote.SpotifyApi
 import com.music.infinity.data.repository.AlbumRepositoryImpl
+import com.music.infinity.data.repository.ArtistRepositoryImpl
 import com.music.infinity.data.repository.CategoriesRepositoryImpl
 import com.music.infinity.data.repository.GenreRepositoryImpl
 import com.music.infinity.data.repository.SearchRepositoryImpl
 import com.music.infinity.domain.repository.AlbumRepository
+import com.music.infinity.domain.repository.ArtistRepository
 import com.music.infinity.domain.repository.CategoriesRepository
 import com.music.infinity.domain.repository.GenreRepository
 import com.music.infinity.domain.repository.SearchRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
+import com.music.infinity.domain.usecase.ArtistUseCase
+import com.music.infinity.domain.usecase.CategoriesUseCase
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -81,6 +85,14 @@ val appModule = module {
         AlbumUseCase(get())
     }
 
+    single {
+        CategoriesUseCase(get())
+    }
+
+    single {
+        ArtistUseCase(get())
+    }
+
     single<SearchRepository> {
         SearchRepositoryImpl(get(), get())
     }
@@ -93,7 +105,11 @@ val appModule = module {
         GenreRepositoryImpl(get(), get())
     }
 
-    single {
-        AlbumUseCase(get())
+    single<ArtistRepository> {
+        ArtistRepositoryImpl(get(), get())
     }
+
+
+
+
 }

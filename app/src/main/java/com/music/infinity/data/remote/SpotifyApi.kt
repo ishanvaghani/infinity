@@ -7,13 +7,20 @@ import com.music.infinity.common.isSuccess
 import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumDetailDto
 import com.music.infinity.data.remote.dto.AlbumListDto
+import com.music.infinity.data.remote.dto.ArtistAlbumDto
+import com.music.infinity.data.remote.dto.ArtistAlbumWrapperDto
+import com.music.infinity.data.remote.dto.ArtistInfoDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
 import com.music.infinity.data.remote.dto.CategoriesListDto
 import com.music.infinity.data.remote.dto.CategoryDto
 import com.music.infinity.data.remote.dto.GenresDto
+import com.music.infinity.data.remote.dto.RelatedArtistDto
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.Failure
+import com.music.infinity.domain.model.Artist
+import com.music.infinity.domain.model.ArtistAlbum
+import com.music.infinity.domain.model.RelatedArtist
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -186,4 +193,67 @@ class SpotifyApi(private val client: HttpClient) {
             Either.Left(e.toCustomExceptions())
         }
     }
+
+    suspend fun getArtistInfo(id: String): Either<Failure, ArtistInfoDto> {
+        return try {
+            val response = client.get(HttpRoutes.ARTIST_INFO) {
+                url {
+                    parameters.append("id", id)
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val artistInfo = response.body<ArtistInfoDto>()
+            Either.Right(artistInfo)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    //TODO :set uri proper : https://api.spotify.com/v1/artists/{id}/albums
+    suspend fun getArtistAlbums(
+        id: String,
+        lstGroup: List<String>,
+        market: String
+    ): Either<Failure, ArtistAlbumWrapperDto> {
+        return try {
+            val response = client.get(HttpRoutes.ARTIST_INFO) {
+                url {
+                    parameters.append("id", id)
+                    parameters.append("include_groups", lstGroup.toString())
+                    parameters.append("market", market)
+                    parameters.append("limit", "10")
+                    parameters.append("offset", "5")
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val artistAlbum = response.body<ArtistAlbumWrapperDto>()
+            Either.Right(artistAlbum)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getRelatedArtists(
+        id: String,
+    ): Either<Failure, RelatedArtistDto> {
+        return try {
+            val response = client.get(HttpRoutes.ARTIST_INFO) {
+                url {
+                    parameters.append("id", id)
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            val relatedArtist = response.body<RelatedArtistDto>()
+            Either.Right(relatedArtist)
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
 }

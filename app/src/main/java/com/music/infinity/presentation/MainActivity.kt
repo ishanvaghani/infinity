@@ -1,6 +1,7 @@
 package com.music.infinity.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.music.infinity.domain.usecase.AlbumUseCase
+import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.domain.usecase.CategoriesUseCase
 import com.music.infinity.presentation.theme.InfinityTheme
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
     private val albumUseCase: AlbumUseCase by inject()
     private val categoriesUseCase : CategoriesUseCase by inject()
+    private val artistUseCase : ArtistUseCase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +42,11 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            albumUseCase.getNewReleasesAlbums()
+            albumUseCase.getNewReleasesAlbums().onRight {
+                Log.e("TAG", "album list >>>>>>>>>> ${it}")
+            }
             categoriesUseCase.getCategories()
+            artistUseCase.getArtistInfo("0TnOYISbd1XYRBk9myaseg")
         }
     }
 }
