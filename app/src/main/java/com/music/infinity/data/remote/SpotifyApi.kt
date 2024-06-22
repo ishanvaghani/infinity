@@ -156,8 +156,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val categoriesList = response.body<CategoriesListDto>()
-            Either.Right(categoriesList)
+            if (response.isSuccess()) {
+                val categoriesList = response.body<CategoriesListDto>()
+                Either.Right(categoriesList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -173,8 +178,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val categoriesList = response.body<CategoryDto>()
-            Either.Right(categoriesList)
+            if (response.isSuccess()) {
+                val categoriesList = response.body<CategoryDto>()
+                Either.Right(categoriesList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -187,8 +197,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val genres = response.body<GenresDto>()
-            Either.Right(genres)
+            if (response.isSuccess()) {
+                val genres = response.body<GenresDto>()
+                Either.Right(genres)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -204,8 +219,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val artistInfo = response.body<ArtistInfoDto>()
-            Either.Right(artistInfo)
+            if (response.isSuccess()) {
+                val artistInfo = response.body<ArtistInfoDto>()
+                Either.Right(artistInfo)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -230,8 +250,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val artistAlbum = response.body<ArtistAlbumWrapperDto>()
-            Either.Right(artistAlbum)
+            if (response.isSuccess()) {
+                val artistAlbum = response.body<ArtistAlbumWrapperDto>()
+                Either.Right(artistAlbum)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }
@@ -249,8 +274,13 @@ class SpotifyApi(private val client: HttpClient) {
                     appendAll(NetworkConstant.headers())
                 }
             }
-            val relatedArtist = response.body<RelatedArtistDto>()
-            Either.Right(relatedArtist)
+
+            if (response.isSuccess()) {
+                val relatedArtist = response.body<RelatedArtistDto>()
+                Either.Right(relatedArtist)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
         } catch (e: Exception) {
             Either.Left(e.toCustomExceptions())
         }

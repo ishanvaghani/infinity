@@ -16,5 +16,4 @@ interface ArtistRepository {
 
     suspend fun getRelatedArtist(id: String): Either<Failure, RelatedArtist>
 
-
 }
