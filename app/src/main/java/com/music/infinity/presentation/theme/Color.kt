@@ -13,7 +13,9 @@ private val Mercury = Color(0xFFE1E1E1)
 private val DoveGray = Color(0xFF616161)
 private val MineShaft = Color(0xFF2C2C2C)
 private val CodGray = Color(0xFF1C1B1B)
-private val SunsetPurple = Color(0xFFA865B5)
+private val LimeGreen = Color(0xFF42C83C)
+private val Gainsboro = Color(0xFFDBDBDB)
+private val Jet = Color(0xFF343434)
 
 @Immutable
 data class InfinityColors(
@@ -26,7 +28,9 @@ data class InfinityColors(
     val doveGray: Color,
     val mineShaft: Color,
     val codGray: Color,
-    val sunsetPurple: Color
+    val limeGreen: Color,
+    val gainsboro: Color,
+    val jet: Color
 )
 
 val LocalInfinityColors = staticCompositionLocalOf {
@@ -40,7 +44,9 @@ val LocalInfinityColors = staticCompositionLocalOf {
         doveGray = Color.Unspecified,
         mineShaft = Color.Unspecified,
         codGray = Color.Unspecified,
-        sunsetPurple = Color.Unspecified
+        limeGreen = Color.Unspecified,
+        gainsboro = Color.Unspecified,
+        jet = Color.Unspecified
     )
 }
 
@@ -54,5 +60,7 @@ val infinityColors = InfinityColors(
     doveGray = DoveGray,
     mineShaft = MineShaft,
     codGray = CodGray,
-    sunsetPurple = SunsetPurple
+    limeGreen = LimeGreen,
+    gainsboro = Gainsboro,
+    jet = Jet
 )
