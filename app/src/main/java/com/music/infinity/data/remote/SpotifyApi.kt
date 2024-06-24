@@ -11,6 +11,7 @@ import com.music.infinity.data.remote.dto.AuthTokenDto
 import com.music.infinity.data.remote.dto.CategoriesListDto
 import com.music.infinity.data.remote.dto.CategoryDto
 import com.music.infinity.data.remote.dto.GenresDto
+import com.music.infinity.data.remote.dto.ResponseWrapper
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.Failure
@@ -59,7 +60,7 @@ class SpotifyApi(private val client: HttpClient) {
                 }
             }
             if (response.isSuccess()) {
-                val albumWrapper = response.body<AlbumListDto>()
+                val albumWrapper = response.body<ResponseWrapper<AlbumListDto>>().albums
                 Either.Right(albumWrapper)
             } else {
                 Either.Left(response.status.toCustomExceptions())
