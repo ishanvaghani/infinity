@@ -7,8 +7,8 @@ val localProperties = gradleLocalProperties(rootDir, providers)
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
+    // material 3
     implementation(libs.androidx.material3)
 
     // google fonts
@@ -130,4 +132,10 @@ dependencies {
 
     // rebugger
     debugImplementation(libs.rebugger)
+
+    // kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // compose navigation
+    implementation(libs.androidx.navigation.compose)
 }

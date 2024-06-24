@@ -14,6 +14,10 @@ import com.music.infinity.domain.repository.CategoriesRepository
 import com.music.infinity.domain.repository.GenreRepository
 import com.music.infinity.domain.repository.SearchRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
+import com.music.infinity.domain.usecase.CategoriesUseCase
+import com.music.infinity.domain.usecase.GenreUseCase
+import com.music.infinity.domain.usecase.SearchUseCase
+import com.music.infinity.presentation.home.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -23,7 +27,9 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.request
 import io.ktor.http.URLProtocol
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -37,9 +43,12 @@ val appModule = module {
             }
 
             install(ContentNegotiation) {
-                Json {
-                    ignoreUnknownKeys = true
-                }
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    }
+                )
             }
 
             engine {
@@ -85,8 +94,16 @@ val appModule = module {
         SearchRepositoryImpl(get(), get())
     }
 
+    single {
+        SearchUseCase(get())
+    }
+
     single<CategoriesRepository> {
         CategoriesRepositoryImpl(get(), get())
+    }
+
+    single {
+        CategoriesUseCase(get())
     }
 
     single<GenreRepository> {
@@ -94,6 +111,10 @@ val appModule = module {
     }
 
     single {
-        AlbumUseCase(get())
+        GenreUseCase(get())
+    }
+
+    viewModel {
+        HomeViewModel(get())
     }
 }
