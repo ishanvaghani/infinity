@@ -17,7 +17,7 @@ logbackClassic = "1.2.6"
 paging = "3.3.0"
 rebugger = "1.0.0-rc03"
 uiTextGoogleFonts = "1.6.8"
-navigationCompose = "2.8.0-beta03"
+navigationCompose = "2.8.0-beta04"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

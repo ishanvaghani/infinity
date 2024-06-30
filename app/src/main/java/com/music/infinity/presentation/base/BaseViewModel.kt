@@ -56,7 +56,7 @@ abstract class BaseViewModel<T, U> : ViewModel() {
     }
 
     fun setScreenState(state: ScreenState<T>) {
-        _uiState.value = state
+        _uiState.update { state }
     }
 
     fun getCurrentState(): ScreenState<T> {
