@@ -1,9 +1,9 @@
 package com.music.infinity.data.remote.dto
 
-import com.music.infinity.domain.model.CategoriesList
+import com.music.infinity.domain.model.ArtistAlbumWrapper
 import kotlinx.serialization.SerialName
 
-data class CategoriesListDto(
+class ArtistAlbumWrapperDto(
     @SerialName("href")
     val href: String,
     @SerialName("limit")
@@ -13,21 +13,18 @@ data class CategoriesListDto(
     @SerialName("offset")
     val offset: Long,
     @SerialName("previous")
-    val previous: String?,
+    val previous: Any?,
     @SerialName("total")
     val total: Long,
     @SerialName("items")
-    val categories: List<CategoryDto>,
+    val items: List<ArtistAlbumDto>,
 ) {
-    fun toCategoriesList(): CategoriesList {
-        return CategoriesList(
-            href,
-            limit,
-            next,
-            offset,
-            previous,
-            total,
-            categories.map { it.toCategory() }
+
+    fun toArtistAlbumWrapper() : ArtistAlbumWrapper {
+        return  ArtistAlbumWrapper(
+            href, limit, next, offset, previous, total, items.map {
+                it.toArtistAlbum()
+            }
         )
     }
 
