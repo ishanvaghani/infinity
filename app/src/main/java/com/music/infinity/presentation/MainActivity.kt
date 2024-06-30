@@ -2,6 +2,7 @@ package com.music.infinity.presentation
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -30,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.music.infinity.presentation.home.HomeScreen
+import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.presentation.models.BottomNavigationItem
 import com.music.infinity.presentation.routes.HomeScreenRoute
 import com.music.infinity.presentation.routes.SearchScreenRoute

@@ -7,4 +7,5 @@ object HttpRoutes {
     const val ALBUMS = "albums"
     const val GENRES = "recommendations/available-genre-seeds"
     const val SEARCH = "search"
+    const val ARTIST_INFO = "artists"
 }
