@@ -1,4 +1,4 @@
-package com.music.infinity.presentation.composables
+package com.music.infinity.presentation.home.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

@@ -17,6 +17,7 @@ import com.music.infinity.domain.usecase.AlbumUseCase
 import com.music.infinity.domain.usecase.CategoriesUseCase
 import com.music.infinity.domain.usecase.GenreUseCase
 import com.music.infinity.domain.usecase.SearchUseCase
+import com.music.infinity.presentation.albums.AlbumsViewModel
 import com.music.infinity.presentation.home.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -116,5 +117,9 @@ val appModule = module {
 
     viewModel {
         HomeViewModel(get())
+    }
+
+    viewModel {
+        AlbumsViewModel(get())
     }
 }

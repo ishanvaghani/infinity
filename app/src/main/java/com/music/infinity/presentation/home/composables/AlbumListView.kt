@@ -4,12 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,7 +21,6 @@ import com.music.infinity.R
 import com.music.infinity.common.model.Image
 import com.music.infinity.domain.model.Album
 import com.music.infinity.domain.model.AlbumList
-import com.music.infinity.presentation.composables.AlbumItemView
 import com.music.infinity.presentation.home.models.HomeAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
@@ -57,16 +54,14 @@ fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeActio
                 }
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 14.dp)
+            contentPadding = PaddingValues(horizontal = 8.dp)
         ) {
-            itemsIndexed(albumList.albums) { index, item ->
+            items(albumList.albums, key = { it.id }) {
                 AlbumItemView(
                     modifier = Modifier,
-                    album = item,
-                    addEndMargin = index < albumList.albums.size - 1,
+                    album = it,
                     uiAction = uiAction
                 )
             }

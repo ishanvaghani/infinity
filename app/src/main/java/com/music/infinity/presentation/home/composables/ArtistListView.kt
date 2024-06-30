@@ -19,7 +19,6 @@ import com.music.infinity.R
 import com.music.infinity.common.model.Image
 import com.music.infinity.domain.model.Artist
 import com.music.infinity.domain.model.ArtistList
-import com.music.infinity.presentation.composables.ArtistItemView
 import com.music.infinity.presentation.home.models.HomeAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
@@ -58,7 +57,7 @@ fun ArtistListView(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 14.dp)
         ) {
-            items(artistList.artists) {
+            items(artistList.artists, key = { it.id }) {
                 ArtistItemView(Modifier, it, uiAction)
             }
         }

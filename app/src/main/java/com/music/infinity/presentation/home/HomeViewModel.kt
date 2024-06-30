@@ -29,7 +29,7 @@ class HomeViewModel(
 
     private fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val albumsListResponse = this.async { albumUseCase.getNewReleasesAlbums() }
+            val albumsListResponse = async { albumUseCase.getNewReleasesAlbums() }
 
             val albumsList = albumsListResponse.await()
 

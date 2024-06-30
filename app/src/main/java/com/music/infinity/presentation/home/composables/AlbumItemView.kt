@@ -1,4 +1,4 @@
-package com.music.infinity.presentation.composables
+package com.music.infinity.presentation.home.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -30,14 +30,14 @@ import com.music.infinity.presentation.theme.InfinityTheme
 fun AlbumItemView(
     modifier: Modifier,
     album: Album,
-    addEndMargin: Boolean,
     uiAction: (HomeAction) -> Unit
 ) {
     Column(
         modifier = modifier
-            .then(
-                if (addEndMargin) Modifier.padding(end = 16.dp) else Modifier
-            )
+            .clickable {
+                uiAction(HomeAction.AlbumClick(album))
+            }
+            .padding(8.dp)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -52,9 +52,6 @@ fun AlbumItemView(
                 .height(185.dp)
                 .width(147.dp)
                 .clip(InfinityTheme.shapes.rc30)
-                .clickable {
-                    uiAction(HomeAction.AlbumClick(album))
-                }
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -84,7 +81,6 @@ private fun AlbumItemViewPreview() {
             "",
             0
         ),
-        addEndMargin = true,
         uiAction = {}
     )
 }
