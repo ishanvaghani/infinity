@@ -16,12 +16,13 @@ import com.music.infinity.domain.repository.CategoriesRepository
 import com.music.infinity.domain.repository.GenreRepository
 import com.music.infinity.domain.repository.SearchRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
+import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.domain.usecase.CategoriesUseCase
 import com.music.infinity.domain.usecase.GenreUseCase
 import com.music.infinity.domain.usecase.SearchUseCase
 import com.music.infinity.presentation.albums.AlbumsViewModel
+import com.music.infinity.presentation.genres.GenresViewModel
 import com.music.infinity.presentation.home.HomeViewModel
-import com.music.infinity.domain.usecase.ArtistUseCase
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -136,5 +137,9 @@ val appModule = module {
 
     viewModel {
         AlbumsViewModel(get())
+    }
+
+    viewModel {
+        GenresViewModel(get())
     }
 }

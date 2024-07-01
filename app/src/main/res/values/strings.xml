@@ -7,4 +7,6 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="retry">Retry</string>
     <string name="back">back</string>
+    <string name="choose_genres">Choose genres</string>
+    <string name="continue_btn">Continue</string>
 </resources>

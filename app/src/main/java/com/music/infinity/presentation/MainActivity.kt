@@ -2,7 +2,6 @@ package com.music.infinity.presentation
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -33,40 +32,43 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.music.infinity.data.local.SharedPrefs
 import com.music.infinity.presentation.albums.AlbumsScreen
+import com.music.infinity.presentation.genres.GenresScreen
 import com.music.infinity.presentation.home.HomeScreen
-import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.presentation.models.BottomNavigationItem
 import com.music.infinity.presentation.routes.AlbumsScreenRoute
+import com.music.infinity.presentation.routes.GenresScreenRoute
 import com.music.infinity.presentation.routes.HomeScreenRoute
+import com.music.infinity.presentation.routes.MainScreenRoute
 import com.music.infinity.presentation.routes.SearchScreenRoute
 import com.music.infinity.presentation.search.SearchScreen
 import com.music.infinity.presentation.theme.InfinityTheme
 
-class MainActivity : ComponentActivity() {
-
-    private val navigationItems by lazy {
-        listOf(
-            BottomNavigationItem(
-                "Home",
-                Icons.Filled.Home,
-                Icons.Outlined.Home,
-                HomeScreenRoute
-            ),
-            BottomNavigationItem(
-                "Favourite",
-                Icons.Filled.Favorite,
-                Icons.Outlined.Favorite,
-                HomeScreenRoute
-            ),
-            BottomNavigationItem(
-                "Search",
-                Icons.Filled.Search,
-                Icons.Outlined.Search,
-                SearchScreenRoute
-            )
+private val navigationItems by lazy {
+    listOf(
+        BottomNavigationItem(
+            "Home",
+            Icons.Filled.Home,
+            Icons.Outlined.Home,
+            HomeScreenRoute
+        ),
+        BottomNavigationItem(
+            "Favourite",
+            Icons.Filled.Favorite,
+            Icons.Outlined.Favorite,
+            HomeScreenRoute
+        ),
+        BottomNavigationItem(
+            "Search",
+            Icons.Filled.Search,
+            Icons.Outlined.Search,
+            SearchScreenRoute
         )
-    }
+    )
+}
+
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,23 +79,28 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             InfinityTheme {
-                var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
                 val navController = rememberNavController()
-                val snackBarHostState = remember { SnackbarHostState() }
-
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = InfinityTheme.colors.codGray,
-                    bottomBar = {
-                        BottomNavigationBar(navigationItems, selectedItemIndex, navController) {
-                            selectedItemIndex = it
-                        }
-                    },
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-                ) { innerPadding ->
-                    AppNavHost(Modifier.padding(innerPadding), navController, snackBarHostState)
-                }
+                AppNavHost(navController)
             }
+        }
+    }
+}
+
+@Composable
+fun AppNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = if (SharedPrefs.getSelectedGenres().isNullOrEmpty()) {
+            GenresScreenRoute
+        } else {
+            MainScreenRoute
+        }
+    ) {
+        composable<GenresScreenRoute> {
+            GenresScreen(navController)
+        }
+        composable<MainScreenRoute> {
+            MainScreen()
         }
     }
 }
@@ -127,20 +134,31 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun AppNavHost(
-    modifier: Modifier,
-    navController: NavHostController,
-    snackBarHostState: SnackbarHostState
-) {
-    NavHost(navController = navController, startDestination = HomeScreenRoute) {
-        composable<HomeScreenRoute> {
-            HomeScreen(modifier, navController)
-        }
-        composable<SearchScreenRoute> {
-            SearchScreen(modifier)
-        }
-        composable<AlbumsScreenRoute> {
-            AlbumsScreen(modifier, snackBarHostState, navController)
+fun MainScreen() {
+    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val navController = rememberNavController()
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = InfinityTheme.colors.codGray,
+        bottomBar = {
+            BottomNavigationBar(navigationItems, selectedItemIndex, navController) {
+                selectedItemIndex = it
+            }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+    ) { innerPadding ->
+        NavHost(navController = navController, startDestination = HomeScreenRoute) {
+            composable<HomeScreenRoute> {
+                HomeScreen(Modifier.padding(innerPadding), navController)
+            }
+            composable<SearchScreenRoute> {
+                SearchScreen(Modifier.padding(innerPadding))
+            }
+            composable<AlbumsScreenRoute> {
+                AlbumsScreen(Modifier.padding(innerPadding), snackBarHostState, navController)
+            }
         }
     }
 }

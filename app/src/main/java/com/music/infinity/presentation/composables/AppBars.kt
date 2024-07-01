@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Text
@@ -33,15 +34,16 @@ fun InfinityAppBar(
     actionIconColor: Color? = null,
     actionContentDescription: String? = null,
     onActionClick: (() -> Unit)? = null,
-    onIconClick: () -> Unit
+    onIconClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .padding(horizontal = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (showBackIcon) {
+        if (showBackIcon && onIconClick != null) {
             InfinityIconButton(
                 modifier = Modifier,
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -49,6 +51,8 @@ fun InfinityAppBar(
                 contentDescription = stringResource(R.string.back),
                 onClick = onIconClick
             )
+        } else if (centerTitle) {
+            Spacer(modifier = Modifier.size(48.dp))
         }
         Text(
             text = title,
