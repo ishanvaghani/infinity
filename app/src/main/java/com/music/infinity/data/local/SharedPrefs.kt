@@ -11,7 +11,7 @@ object SharedPrefs : KoinComponent {
 
     fun getAccessToken(): String? {
         if (AppConstants.accessToken.isNotNullOrEmpty()) {
-                return AppConstants.accessToken
+            return AppConstants.accessToken
         }
         AppConstants.accessToken = sharedPrefManager.getString(SharedPrefKeys.ACCESS_TOKEN)
         return AppConstants.accessToken
@@ -20,5 +20,13 @@ object SharedPrefs : KoinComponent {
     fun setAccessToken(accessToken: String?) {
         AppConstants.accessToken = accessToken
         sharedPrefManager.saveString(SharedPrefKeys.ACCESS_TOKEN, accessToken)
+    }
+
+    fun getSelectedGenres(): String? {
+        return sharedPrefManager.getString(SharedPrefKeys.SELECTED_GENRES)
+    }
+
+    fun setSelectedGenres(genres: String) {
+        sharedPrefManager.saveString(SharedPrefKeys.SELECTED_GENRES, genres)
     }
 }
