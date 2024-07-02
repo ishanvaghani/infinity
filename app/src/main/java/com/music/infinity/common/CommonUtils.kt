@@ -34,3 +34,18 @@ fun getCountryCode(): String {
         return defaultCountry
     }
 }
+
+fun formatDuration(milliseconds: Long): String {
+    val seconds = milliseconds / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+
+    val remainingSeconds = seconds % 60
+    val remainingMinutes = minutes % 60
+
+    return when {
+        hours > 0 -> String.format("%02d:%02d:%02d", hours, remainingMinutes, remainingSeconds)
+        minutes > 0 -> String.format("%02d:%02d", remainingMinutes, remainingSeconds)
+        else -> String.format("%d seconds", remainingSeconds)
+    }
+}

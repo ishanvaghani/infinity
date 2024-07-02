@@ -9,18 +9,23 @@ import com.music.infinity.data.repository.AlbumRepositoryImpl
 import com.music.infinity.data.repository.ArtistRepositoryImpl
 import com.music.infinity.data.repository.CategoriesRepositoryImpl
 import com.music.infinity.data.repository.GenreRepositoryImpl
+import com.music.infinity.data.repository.PlaylistRepositoryImpl
+import com.music.infinity.data.repository.RecommendationRepositoryImpl
 import com.music.infinity.data.repository.SearchRepositoryImpl
 import com.music.infinity.domain.repository.AlbumRepository
 import com.music.infinity.domain.repository.ArtistRepository
 import com.music.infinity.domain.repository.CategoriesRepository
 import com.music.infinity.domain.repository.GenreRepository
+import com.music.infinity.domain.repository.PlaylistRepository
+import com.music.infinity.domain.repository.RecommendationRepository
 import com.music.infinity.domain.repository.SearchRepository
 import com.music.infinity.domain.usecase.AlbumUseCase
 import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.domain.usecase.CategoriesUseCase
 import com.music.infinity.domain.usecase.GenreUseCase
+import com.music.infinity.domain.usecase.PlaylistUseCase
+import com.music.infinity.domain.usecase.RecommendationUseCase
 import com.music.infinity.domain.usecase.SearchUseCase
-import com.music.infinity.presentation.albums.AlbumsViewModel
 import com.music.infinity.presentation.genres.GenresViewModel
 import com.music.infinity.presentation.home.HomeViewModel
 import io.ktor.client.HttpClient
@@ -87,10 +92,36 @@ val appModule = module {
         NetworkManager(get())
     }
 
+    // repositories
     single<AlbumRepository> {
         AlbumRepositoryImpl(get(), get())
     }
 
+    single<SearchRepository> {
+        SearchRepositoryImpl(get(), get())
+    }
+
+    single<CategoriesRepository> {
+        CategoriesRepositoryImpl(get(), get())
+    }
+
+    single<GenreRepository> {
+        GenreRepositoryImpl(get(), get())
+    }
+
+    single<ArtistRepository> {
+        ArtistRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    single<RecommendationRepository> {
+        RecommendationRepositoryImpl(get(), get())
+    }
+
+    // use cases
     single {
         AlbumUseCase(get())
     }
@@ -103,40 +134,25 @@ val appModule = module {
         ArtistUseCase(get())
     }
 
-    single<SearchRepository> {
-        SearchRepositoryImpl(get(), get())
-    }
-
     single {
         SearchUseCase(get())
-    }
-
-    single<CategoriesRepository> {
-        CategoriesRepositoryImpl(get(), get())
-    }
-
-    single {
-        CategoriesUseCase(get())
-    }
-
-    single<GenreRepository> {
-        GenreRepositoryImpl(get(), get())
     }
 
     single {
         GenreUseCase(get())
     }
 
-    viewModel {
-        HomeViewModel(get())
+    single {
+        PlaylistUseCase(get())
     }
 
-    single<ArtistRepository> {
-        ArtistRepositoryImpl(get(), get())
+    single {
+        RecommendationUseCase(get())
     }
 
+    // viewmodels
     viewModel {
-        AlbumsViewModel(get())
+        HomeViewModel(get(), get(), get())
     }
 
     viewModel {

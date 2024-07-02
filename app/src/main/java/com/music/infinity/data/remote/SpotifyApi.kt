@@ -3,25 +3,25 @@ package com.music.infinity.data.remote
 import arrow.core.Either
 import com.music.infinity.BuildConfig
 import com.music.infinity.common.encodeBase64
+import com.music.infinity.common.getCountryCode
 import com.music.infinity.common.isSuccess
 import com.music.infinity.common.toCustomExceptions
 import com.music.infinity.data.remote.dto.AlbumDetailDto
 import com.music.infinity.data.remote.dto.AlbumListDto
-import com.music.infinity.data.remote.dto.ArtistAlbumDto
 import com.music.infinity.data.remote.dto.ArtistAlbumWrapperDto
 import com.music.infinity.data.remote.dto.ArtistInfoDto
 import com.music.infinity.data.remote.dto.AuthTokenDto
 import com.music.infinity.data.remote.dto.CategoriesListDto
 import com.music.infinity.data.remote.dto.CategoryDto
 import com.music.infinity.data.remote.dto.GenresDto
-import com.music.infinity.data.remote.dto.ResponseWrapper
+import com.music.infinity.data.remote.dto.PlaylistListDto
+import com.music.infinity.data.remote.dto.PlaylistWrapper
+import com.music.infinity.data.remote.dto.RecommendationListDto
 import com.music.infinity.data.remote.dto.RelatedArtistDto
+import com.music.infinity.data.remote.dto.ResponseWrapper
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.Failure
-import com.music.infinity.domain.model.Artist
-import com.music.infinity.domain.model.ArtistAlbum
-import com.music.infinity.domain.model.RelatedArtist
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -149,7 +149,7 @@ class SpotifyApi(private val client: HttpClient) {
         return try {
             val response = client.get(HttpRoutes.CATEGORIES) {
                 url {
-                    parameters.append("locale", NetworkConstant.LOCALE)
+                    parameters.append("locale", getCountryCode())
                     parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
                     parameters.append("offset", "$offset")
                 }
@@ -260,9 +260,7 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
-    suspend fun getRelatedArtists(
-        id: String,
-    ): Either<Failure, RelatedArtistDto> {
+    suspend fun getRelatedArtists(id: String): Either<Failure, RelatedArtistDto> {
         return try {
             val response = client.get(HttpRoutes.ARTIST_INFO) {
                 url {
@@ -284,4 +282,52 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
+    suspend fun getFeaturedPlaylists(): Either<Failure, PlaylistListDto> {
+        return try {
+            val response = client.get(HttpRoutes.FEATURED_PLAYLISTS) {
+                url {
+                    parameters.append("locale", getCountryCode())
+                    parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
+                    parameters.append("offset", 0.toString())
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            if (response.isSuccess()) {
+                val playlistList = response.body<PlaylistWrapper>().playlists
+                Either.Right(playlistList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getRecommendations(genres: String? = null): Either<Failure, RecommendationListDto> {
+        return try {
+            val response = client.get(HttpRoutes.RECOMMENDATIONS) {
+                url {
+                    parameters.append("locale", getCountryCode())
+                    parameters.append("limit", NetworkConstant.PAGE_LIMIT.toString())
+                    parameters.append("offset", 0.toString())
+                    if (genres != null) {
+                        parameters.append("seed_genres", genres)
+                    }
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            if (response.isSuccess()) {
+                val playlistList = response.body<RecommendationListDto>()
+                Either.Right(playlistList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
 }

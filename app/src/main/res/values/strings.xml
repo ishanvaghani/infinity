@@ -9,4 +9,7 @@
     <string name="back">back</string>
     <string name="choose_genres">Choose genres</string>
     <string name="continue_btn">Continue</string>
+    <string name="play">Play</string>
+    <string name="featured_playlists">Featured playlists</string>
+    <string name="recommendations">Recommendations</string>
 </resources>

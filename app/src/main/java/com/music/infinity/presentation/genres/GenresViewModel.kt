@@ -28,39 +28,32 @@ class GenresViewModel(
                 val genres = result.getOrNull()?.genres?.map {
                     it.replaceFirstChar(Char::titlecase)
                 } ?: listOf()
-                setScreenState(
-                    getCurrentState().copy(
-                        isLoading = false,
-                        data = GenresState(genres, listOf())
-                    )
-                )
+                setDataState(GenresState(genres, listOf()))
             }
         }
     }
 
     fun saveGenres() {
-        val genres = getCurrentState().data?.selectedGenres
+        val genres = getCurrentData()?.selectedGenres
         if (genres.isNullOrEmpty().not()) {
-            val genresString = genres!!.joinToString(", ")
-            SharedPrefs.setSelectedGenres(genresString)
+            val genresString = genres!!.joinToString(separator = ",", limit = 3)
+            SharedPrefs.setSelectedGenres(genresString.lowercase())
         }
     }
 
     fun isSelected(genre: String): Boolean {
-        return getCurrentState().data?.selectedGenres?.contains(genre) ?: false
+        return getCurrentData()?.selectedGenres?.contains(genre) ?: false
     }
 
     fun genreClick(genre: String) {
-        val selectedGenres = getCurrentState().data?.selectedGenres ?: listOf()
-        setScreenState(
-            getCurrentState().copy(
-                data = getCurrentState().data?.copy(
-                    selectedGenres = if (selectedGenres.contains(genre)) {
-                        selectedGenres.minus(genre)
-                    } else {
-                        selectedGenres.plus(genre)
-                    }
-                )
+        val selectedGenres = getCurrentData()?.selectedGenres ?: listOf()
+        setDataState(
+            getCurrentData()?.copy(
+                selectedGenres = if (selectedGenres.contains(genre)) {
+                    selectedGenres.minus(genre)
+                } else {
+                    selectedGenres.plus(genre)
+                }
             )
         )
     }

@@ -8,4 +8,6 @@ object HttpRoutes {
     const val GENRES = "recommendations/available-genre-seeds"
     const val SEARCH = "search"
     const val ARTIST_INFO = "artists"
+    const val RECOMMENDATIONS = "recommendations"
+    const val FEATURED_PLAYLISTS = "browse/featured-playlists"
 }

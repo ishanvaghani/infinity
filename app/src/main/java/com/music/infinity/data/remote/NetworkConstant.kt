@@ -10,7 +10,6 @@ object NetworkConstant {
 
     const val PAGE_LIMIT = 10
     const val MAX_RETRIES = 3
-    const val LOCALE = "in"
 
     fun headers(): StringValues {
         return StringValues.build {
