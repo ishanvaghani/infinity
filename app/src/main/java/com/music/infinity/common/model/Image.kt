@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Image(
     @SerialName("height")
-    val height: Int,
+    val height: Int?,
     @SerialName("width")
-    val width: Int,
+    val width: Int?,
     @SerialName("url")
     val url: String
 )

@@ -55,12 +55,29 @@ abstract class BaseViewModel<S, A> : ViewModel() {
         }
     }
 
-    fun setScreenState(state: ScreenState<S>) {
-        _uiState.update { state }
+    fun setDataState(data: S?) {
+        _uiState.update {
+            getCurrentState().copy(
+                isLoading = false,
+                data = data
+            )
+        }
     }
 
     fun getCurrentState(): ScreenState<S> {
         return if (_uiState.value.data == null) getInitialState() else _uiState.value
+    }
+
+    fun getCurrentData(): S? {
+        return getCurrentState().data
+    }
+
+    fun isLoading(): Boolean {
+        return getCurrentState().isLoading
+    }
+
+    fun getError(): ScreenError? {
+        return getCurrentState().error
     }
 
     abstract fun getInitialState(): ScreenState<S>

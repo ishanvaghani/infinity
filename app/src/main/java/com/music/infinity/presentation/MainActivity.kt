@@ -28,16 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.music.infinity.R
 import com.music.infinity.data.local.SharedPrefs
-import com.music.infinity.presentation.albums.AlbumsScreen
+import com.music.infinity.presentation.composables.InfinityAppBar
 import com.music.infinity.presentation.genres.GenresScreen
 import com.music.infinity.presentation.home.HomeScreen
 import com.music.infinity.presentation.models.BottomNavigationItem
-import com.music.infinity.presentation.routes.AlbumsScreenRoute
 import com.music.infinity.presentation.routes.GenresScreenRoute
 import com.music.infinity.presentation.routes.HomeScreenRoute
 import com.music.infinity.presentation.routes.MainScreenRoute
@@ -147,6 +148,13 @@ fun MainScreen() {
                 selectedItemIndex = it
             }
         },
+        topBar = {
+            InfinityAppBar(
+                modifier = Modifier,
+                showBackIcon = false,
+                title = stringResource(R.string.app_name)
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { innerPadding ->
         NavHost(navController = navController, startDestination = HomeScreenRoute) {
@@ -155,9 +163,6 @@ fun MainScreen() {
             }
             composable<SearchScreenRoute> {
                 SearchScreen(Modifier.padding(innerPadding))
-            }
-            composable<AlbumsScreenRoute> {
-                AlbumsScreen(Modifier.padding(innerPadding), snackBarHostState, navController)
             }
         }
     }
