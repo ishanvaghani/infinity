@@ -12,4 +12,5 @@
     <string name="play">Play</string>
     <string name="featured_playlists">Featured playlists</string>
     <string name="recommendations">Recommendations</string>
+    <string name="select_at_least_three_genre">Select at least 3 genres</string>
 </resources>

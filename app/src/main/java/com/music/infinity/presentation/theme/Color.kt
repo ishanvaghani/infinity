@@ -18,6 +18,8 @@ private val Gainsboro = Color(0xFFDBDBDB)
 private val Jet = Color(0xFF343434)
 private val White40 = Color(0x40FFFFFF)
 private val Black = Color(0xFF000000)
+private val VampireBlack = Color(0xFF08090C)
+private val White80 = Color(0xCCFFFFFF)
 
 @Immutable
 data class InfinityColors(
@@ -34,7 +36,9 @@ data class InfinityColors(
     val gainsboro: Color,
     val jet: Color,
     val white40: Color,
-    val black: Color
+    val black: Color,
+    val vampireBlack: Color,
+    val white80: Color
 )
 
 val LocalInfinityColors = staticCompositionLocalOf {
@@ -52,7 +56,9 @@ val LocalInfinityColors = staticCompositionLocalOf {
         gainsboro = Color.Unspecified,
         jet = Color.Unspecified,
         white40 = Color.Unspecified,
-        black = Color.Unspecified
+        black = Color.Unspecified,
+        vampireBlack = Color.Unspecified,
+        white80 = Color.Unspecified
     )
 }
 
@@ -70,5 +76,7 @@ val infinityColors = InfinityColors(
     gainsboro = Gainsboro,
     jet = Jet,
     white40 = White40,
-    black = Black
+    black = Black,
+    vampireBlack = VampireBlack,
+    white80 = White80
 )
