@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.music.infinity.R
 import com.music.infinity.common.model.Image
+import com.music.infinity.domain.model.Followers
 import com.music.infinity.domain.model.Playlist
 import com.music.infinity.presentation.composables.InfinityIconButton
 import com.music.infinity.presentation.home.models.HomeAction
@@ -115,6 +116,8 @@ fun PlaylistItemViewPreview() {
                 Image(100, 100, "https://picsum.photos/id/237/200/300")
             ),
             name = "This is name",
+            followers = Followers(null, 1),
+            tracks = listOf()
         ),
         uiAction = {}
     )

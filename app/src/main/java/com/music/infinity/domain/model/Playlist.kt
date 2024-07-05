@@ -8,4 +8,6 @@ data class Playlist(
     val id: String,
     val images: List<Image>,
     val name: String,
+    val followers: Followers,
+    val tracks: List<Track>
 )

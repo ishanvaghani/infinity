@@ -17,9 +17,21 @@ data class PlaylistDto(
     val images: List<Image>,
     @SerialName("name")
     val name: String,
+    @SerialName("followers")
+    val followers: FollowersDto,
+    @SerialName("tracks")
+    val tracks: List<TrackDto>
 ) {
 
     fun toPlaylist(): Playlist {
-        return Playlist(description, href, id, images, name)
+        return Playlist(
+            description,
+            href,
+            id,
+            images,
+            name,
+            followers.toFollower(),
+            tracks.map { it.toTrack() }
+        )
     }
 }

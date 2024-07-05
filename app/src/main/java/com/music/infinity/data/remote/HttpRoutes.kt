@@ -10,4 +10,5 @@ object HttpRoutes {
     const val ARTIST_INFO = "artists"
     const val RECOMMENDATIONS = "recommendations"
     const val FEATURED_PLAYLISTS = "browse/featured-playlists"
+    const val PLAYLISTS = "playlists"
 }

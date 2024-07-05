@@ -14,6 +14,7 @@ import com.music.infinity.data.remote.dto.AuthTokenDto
 import com.music.infinity.data.remote.dto.CategoriesListDto
 import com.music.infinity.data.remote.dto.CategoryDto
 import com.music.infinity.data.remote.dto.GenresDto
+import com.music.infinity.data.remote.dto.PlaylistDto
 import com.music.infinity.data.remote.dto.PlaylistListDto
 import com.music.infinity.data.remote.dto.PlaylistWrapper
 import com.music.infinity.data.remote.dto.RecommendationListDto
@@ -297,6 +298,27 @@ class SpotifyApi(private val client: HttpClient) {
             if (response.isSuccess()) {
                 val playlistList = response.body<PlaylistWrapper>().playlists
                 Either.Right(playlistList)
+            } else {
+                Either.Left(response.status.toCustomExceptions())
+            }
+        } catch (e: Exception) {
+            Either.Left(e.toCustomExceptions())
+        }
+    }
+
+    suspend fun getPlaylist(id: String): Either<Failure, PlaylistDto> {
+        return try {
+            val response = client.get(HttpRoutes.PLAYLISTS) {
+                url {
+                    path(id)
+                }
+                headers {
+                    appendAll(NetworkConstant.headers())
+                }
+            }
+            if (response.isSuccess()) {
+                val playlist = response.body<PlaylistDto>()
+                Either.Right(playlist)
             } else {
                 Either.Left(response.status.toCustomExceptions())
             }

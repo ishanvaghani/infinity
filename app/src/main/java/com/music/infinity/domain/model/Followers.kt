@@ -1,6 +1,6 @@
 package com.music.infinity.domain.model
 
 data class Followers(
-    val href: Any?,
+    val href: String?,
     val total: Long,
 )
