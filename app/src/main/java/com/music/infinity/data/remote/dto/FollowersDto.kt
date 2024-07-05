@@ -1,12 +1,18 @@
 package com.music.infinity.data.remote.dto
 
 import com.music.infinity.domain.model.Followers
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FollowersDto(
-    val href: Any?,
+    @SerialName("href")
+    val href: String?,
+    @SerialName("total")
     val total: Long,
-){
-    fun getFollower() : Followers{
+) {
+
+    fun toFollower(): Followers {
         return Followers(
             href, total
         )
