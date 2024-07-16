@@ -21,6 +21,7 @@ import com.music.infinity.domain.usecase.GenreUseCase
 import com.music.infinity.domain.usecase.SearchUseCase
 import com.music.infinity.presentation.home.HomeViewModel
 import com.music.infinity.domain.usecase.ArtistUseCase
+import com.music.infinity.presentation.artist.ArtistInfoViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -127,6 +128,10 @@ val appModule = module {
 
     viewModel {
         HomeViewModel(get())
+    }
+
+    viewModel{
+        ArtistInfoViewModel(get())
     }
 
     single<ArtistRepository> {

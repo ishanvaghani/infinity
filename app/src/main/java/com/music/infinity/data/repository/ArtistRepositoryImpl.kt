@@ -24,14 +24,12 @@ class ArtistRepositoryImpl(
 
     override suspend fun getArtistAlbumList(
         id: String,
-        includeGroups: List<String>,
-        marker: String
     ): Either<Failure, List<ArtistAlbum>> {
         val response = networkManager.executeWithAuthentication {
-            spotifyApi.getArtistAlbums(id, includeGroups, marker);
+            spotifyApi.getArtistAlbums(id)
         }
-
-        return response.map { it.items.map { it.toArtistAlbum() } }
+        return response.map { it.toArtistAlbumWrapper().items }
+//        return response.map { it.items.map { it.toArtistAlbum() } }
     }
 
     override suspend fun getRelatedArtist(id: String): Either<Failure, RelatedArtist> {

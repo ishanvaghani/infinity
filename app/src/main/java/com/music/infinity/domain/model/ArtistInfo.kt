@@ -4,7 +4,7 @@ import com.music.infinity.common.model.Image
 import com.music.infinity.data.remote.dto.ExternalUrlsDto
 
 data class ArtistInfo(
-    val externalUrls: ExternalUrlsDto,
+    val externalUrls: ExternalUrls,
     val followers: Followers,
     val genres: List<String>,
     val href: String,

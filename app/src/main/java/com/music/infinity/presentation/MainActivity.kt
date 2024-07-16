@@ -31,8 +31,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.music.infinity.presentation.home.HomeScreen
-import com.music.infinity.domain.usecase.ArtistUseCase
+import com.music.infinity.presentation.artist.ArtistInfoScreen
 import com.music.infinity.presentation.models.BottomNavigationItem
+import com.music.infinity.presentation.routes.ArtistInfoScreenRoute
 import com.music.infinity.presentation.routes.HomeScreenRoute
 import com.music.infinity.presentation.routes.SearchScreenRoute
 import com.music.infinity.presentation.search.SearchScreen
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 "Search",
                 Icons.Filled.Search,
                 Icons.Outlined.Search,
-                SearchScreenRoute
+                ArtistInfoScreenRoute
             )
         )
     }
@@ -128,6 +129,9 @@ fun AppNavHost(modifier: Modifier, navController: NavHostController) {
         }
         composable<SearchScreenRoute> {
             SearchScreen(modifier)
+        }
+        composable<ArtistInfoScreenRoute> {
+            ArtistInfoScreen(modifier)
         }
     }
 }

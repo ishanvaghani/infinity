@@ -1,5 +1,6 @@
-package com.music.infinity.presentation.composables
+package com.music.infinity.presentation.artist.composables
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,16 +24,18 @@ import coil.request.ImageRequest
 import com.music.infinity.R
 import com.music.infinity.common.model.Image
 import com.music.infinity.domain.model.Album
+import com.music.infinity.domain.model.ArtistAlbum
 import com.music.infinity.presentation.home.models.HomeAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
 @Composable
-fun AlbumItemView(
+fun ArtistAlbumItemView(
     modifier: Modifier,
-    album: Album,
+    album: ArtistAlbum,
     addEndMargin: Boolean,
 //    uiAction: (HomeAction) -> Unit
 ) {
+    Log.e("TAG", "images >>>>>>>>${album.images.first()}")
     Column(
         modifier = modifier
             .then(
@@ -70,21 +73,3 @@ fun AlbumItemView(
     }
 }
 
-@Preview
-@Composable
-private fun AlbumItemViewPreview() {
-    AlbumItemView(
-        modifier = Modifier,
-        album = Album(
-            "",
-            emptyList(),
-            "",
-            listOf(Image(100, 100, "https://picsum.photos/id/237/200/300")),
-            "",
-            "",
-            0
-        ),
-        addEndMargin = true,
-//        uiAction = {}
-    )
-}

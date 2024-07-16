@@ -19,9 +19,6 @@ import com.music.infinity.data.remote.dto.RelatedArtistDto
 import com.music.infinity.data.remote.dto.SearchListDto
 import com.music.infinity.data.remote.dto.TrackListDto
 import com.music.infinity.data.remote.model.Failure
-import com.music.infinity.domain.model.Artist
-import com.music.infinity.domain.model.ArtistAlbum
-import com.music.infinity.domain.model.RelatedArtist
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -209,10 +206,10 @@ class SpotifyApi(private val client: HttpClient) {
 
     suspend fun getArtistInfo(id: String): Either<Failure, ArtistInfoDto> {
         return try {
-            val response = client.get(HttpRoutes.ARTIST_INFO) {
-                url {
-                    parameters.append("id", id)
-                }
+            val response = client.get(HttpRoutes.ARTIST_INFO + "/" + id) {
+//                url {
+//                    path(id)
+//                }
                 headers {
                     appendAll(NetworkConstant.headers())
                 }
@@ -229,20 +226,18 @@ class SpotifyApi(private val client: HttpClient) {
         }
     }
 
-    //TODO :set uri proper : https://api.spotify.com/v1/artists/{id}/albums
+
     suspend fun getArtistAlbums(
         id: String,
-        lstGroup: List<String>,
-        market: String
     ): Either<Failure, ArtistAlbumWrapperDto> {
         return try {
-            val response = client.get(HttpRoutes.ARTIST_INFO) {
+            val response = client.get(HttpRoutes.ARTIST_INFO + "/$id/${HttpRoutes.ALBUMS}") {
                 url {
-                    parameters.append("id", id)
-                    parameters.append("include_groups", lstGroup.toString())
-                    parameters.append("market", market)
+//                    path(id)
+//                    path(HttpRoutes.ALBUMS)
+                    parameters.append("market", "ES" )
                     parameters.append("limit", "10")
-                    parameters.append("offset", "5")
+                    parameters.append("offset", "0")
                 }
                 headers {
                     appendAll(NetworkConstant.headers())
@@ -264,9 +259,9 @@ class SpotifyApi(private val client: HttpClient) {
         id: String,
     ): Either<Failure, RelatedArtistDto> {
         return try {
-            val response = client.get(HttpRoutes.ARTIST_INFO) {
+            val response = client.get(HttpRoutes.ARTIST_INFO+ "/"+ id +"/" + HttpRoutes.RELATED_ARTIST) {
                 url {
-                    parameters.append("id", id)
+//                    parameters.append("id", id)
                 }
                 headers {
                     appendAll(NetworkConstant.headers())

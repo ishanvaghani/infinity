@@ -4,4 +4,9 @@
     <string name="artists">Artists</string>
     <string name="new_released_albums">New released albums</string>
     <string name="more">More</string>
+    <string name="albums">Albums</string>
+    <string name="followers">Followers</string>
+    <string name="popularity">Popularity</string>
+    <string name="related_artist">Related Artist</string>
+
 </resources>

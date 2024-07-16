@@ -1,5 +1,6 @@
-package com.music.infinity.presentation.home.composables
+package com.music.infinity.presentation.artist.composables
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,12 +24,14 @@ import com.music.infinity.R
 import com.music.infinity.common.model.Image
 import com.music.infinity.domain.model.Album
 import com.music.infinity.domain.model.AlbumList
+import com.music.infinity.domain.model.ArtistAlbum
+import com.music.infinity.presentation.artist.models.ArtistInfoAction
 import com.music.infinity.presentation.composables.AlbumItemView
 import com.music.infinity.presentation.home.models.HomeAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
 @Composable
-fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeAction) -> Unit) {
+fun AlbumListView(modifier: Modifier, albumList: List<ArtistAlbum>, uiAction: (ArtistInfoAction) -> Unit) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = modifier
@@ -38,14 +41,14 @@ fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeActio
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.new_released_albums),
+                text = stringResource(R.string.albums),
                 style = InfinityTheme.typography.t1.copy(
                     color = InfinityTheme.colors.gainsboro,
                     fontWeight = FontWeight.Bold
                 )
             )
             TextButton(
-                onClick = { uiAction(HomeAction.MoreAlbumsClick) },
+                onClick = { },
                 content = {
                     Text(
                         text = stringResource(R.string.more),
@@ -57,43 +60,19 @@ fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeActio
                 }
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 14.dp)
         ) {
-            itemsIndexed(albumList.albums) { index, item ->
-                AlbumItemView(
+            Log.e("TAG", "list >>>>>>>>>>>>>>>>>>>> $albumList")
+            itemsIndexed(albumList) { index, item ->
+                ArtistAlbumItemView(
                     modifier = Modifier,
                     album = item,
-                    addEndMargin = index < albumList.albums.size - 1,
+                    addEndMargin = index < albumList.size - 1,
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun AlbumListViewPreview() {
-    AlbumListView(
-        modifier = Modifier,
-        albumList = AlbumList(
-            albums = listOf(
-                Album(
-                    "",
-                    emptyList(),
-                    "",
-                    listOf(Image(100, 100, "https://picsum.photos/id/237/200/300")),
-                    "",
-                    "",
-                    0
-                )
-            ),
-            limit = 0,
-            offset = 0,
-            total = 0
-        ),
-        uiAction = {}
-    )
 }

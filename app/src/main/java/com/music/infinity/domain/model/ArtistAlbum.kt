@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 class ArtistAlbum(
     val albumType: String,
     val totalTracks: Long,
-    val availableMarkets: List<String>,
+    val availableMarkets: List<String>?,
     val externalUrls: ExternalUrlsDto,
     val href: String,
     val id: String,
