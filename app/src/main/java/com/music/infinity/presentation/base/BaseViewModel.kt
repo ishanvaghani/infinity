@@ -14,23 +14,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<T, U> : ViewModel() {
+abstract class BaseViewModel<S, A> : ViewModel() {
 
-    private val _uiState: MutableStateFlow<ScreenState<T>> by lazy {
+    private val _uiState: MutableStateFlow<ScreenState<S>> by lazy {
         MutableStateFlow(ScreenState(isLoading = true, data = null))
     }
-    val uiState: StateFlow<ScreenState<T>> by lazy {
+    val uiState: StateFlow<ScreenState<S>> by lazy {
         _uiState.asStateFlow()
     }
 
-    private val _uiAction: MutableSharedFlow<U> by lazy {
+    private val _uiAction: MutableSharedFlow<A> by lazy {
         MutableSharedFlow()
     }
-    val uiAction: SharedFlow<U> by lazy {
+    val uiAction: SharedFlow<A> by lazy {
         _uiAction.asSharedFlow()
     }
 
-    fun sendAction(action: U) = viewModelScope.launch(Dispatchers.Main) {
+    fun sendAction(action: A) = viewModelScope.launch(Dispatchers.Main) {
         _uiAction.emit(action)
     }
 
@@ -55,13 +55,30 @@ abstract class BaseViewModel<T, U> : ViewModel() {
         }
     }
 
-    fun setScreenState(state: ScreenState<T>) {
-        _uiState.value = state
+    fun setDataState(data: S?) {
+        _uiState.update {
+            getCurrentState().copy(
+                isLoading = false,
+                data = data
+            )
+        }
     }
 
-    fun getCurrentState(): ScreenState<T> {
+    fun getCurrentState(): ScreenState<S> {
         return if (_uiState.value.data == null) getInitialState() else _uiState.value
     }
 
-    abstract fun getInitialState(): ScreenState<T>
+    fun getCurrentData(): S? {
+        return getCurrentState().data
+    }
+
+    fun isLoading(): Boolean {
+        return getCurrentState().isLoading
+    }
+
+    fun getError(): ScreenError? {
+        return getCurrentState().error
+    }
+
+    abstract fun getInitialState(): ScreenState<S>
 }

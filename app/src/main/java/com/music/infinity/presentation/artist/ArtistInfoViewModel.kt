@@ -1,12 +1,10 @@
 package com.music.infinity.presentation.artist
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.music.infinity.domain.usecase.ArtistUseCase
 import com.music.infinity.presentation.artist.models.ArtistInfoAction
 import com.music.infinity.presentation.artist.models.ArtistInfoState
 import com.music.infinity.presentation.base.BaseViewModel
-import com.music.infinity.presentation.home.models.HomeState
 import com.music.infinity.presentation.models.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -33,15 +31,11 @@ class ArtistInfoViewModel(
             val relatedArtist = relatedArtistResponse.await()
 
 
-
-            setScreenState(
-                getCurrentState().copy(
-                    isLoading = false,
-                    data = ArtistInfoState(
-                        artistInfo.getOrNull(),
-                        artistAlbum.getOrNull(),
-                        relatedArtist.getOrNull()
-                    )
+            setDataState(
+                ArtistInfoState(
+                    artistInfo.getOrNull(),
+                    artistAlbum.getOrNull(),
+                    relatedArtist.getOrNull()
                 )
             )
         }

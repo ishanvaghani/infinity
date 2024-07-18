@@ -2,7 +2,6 @@ package com.music.infinity.presentation
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -20,49 +19,59 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.music.infinity.presentation.home.HomeScreen
+import com.music.infinity.R
+import com.music.infinity.data.local.SharedPrefs
 import com.music.infinity.presentation.artist.ArtistInfoScreen
+import com.music.infinity.presentation.composables.InfinityAppBar
+import com.music.infinity.presentation.genres.GenresScreen
+import com.music.infinity.presentation.home.HomeScreen
 import com.music.infinity.presentation.models.BottomNavigationItem
 import com.music.infinity.presentation.routes.ArtistInfoScreenRoute
+import com.music.infinity.presentation.routes.GenresScreenRoute
 import com.music.infinity.presentation.routes.HomeScreenRoute
+import com.music.infinity.presentation.routes.MainScreenRoute
 import com.music.infinity.presentation.routes.SearchScreenRoute
 import com.music.infinity.presentation.search.SearchScreen
 import com.music.infinity.presentation.theme.InfinityTheme
 
-class MainActivity : ComponentActivity() {
-
-    private val navigationItems by lazy {
-        listOf(
-            BottomNavigationItem(
-                "Home",
-                Icons.Filled.Home,
-                Icons.Outlined.Home,
-                HomeScreenRoute
-            ),
-            BottomNavigationItem(
-                "Favourite",
-                Icons.Filled.Favorite,
-                Icons.Outlined.Favorite,
-                HomeScreenRoute
-            ),
-            BottomNavigationItem(
-                "Search",
-                Icons.Filled.Search,
-                Icons.Outlined.Search,
-                ArtistInfoScreenRoute
-            )
+private val navigationItems by lazy {
+    listOf(
+        BottomNavigationItem(
+            "Home",
+            Icons.Filled.Home,
+            Icons.Outlined.Home,
+            HomeScreenRoute
+        ),
+        BottomNavigationItem(
+            "Favourite",
+            Icons.Filled.Favorite,
+            Icons.Outlined.Favorite,
+            HomeScreenRoute
+        ),
+        BottomNavigationItem(
+            "Search",
+            Icons.Filled.Search,
+            Icons.Outlined.Search,
+            SearchScreenRoute
         )
-    }
+    )
+}
+
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,21 +82,28 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             InfinityTheme {
-                var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
                 val navController = rememberNavController()
-
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = InfinityTheme.colors.codGray,
-                    bottomBar = {
-                        BottomNavigationBar(navigationItems, selectedItemIndex, navController) {
-                            selectedItemIndex = it
-                        }
-                    }
-                ) { innerPadding ->
-                    AppNavHost(Modifier.padding(innerPadding), navController)
-                }
+                AppNavHost(navController)
             }
+        }
+    }
+}
+
+@Composable
+fun AppNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = if (SharedPrefs.getSelectedGenres().isNullOrEmpty()) {
+            GenresScreenRoute
+        } else {
+            MainScreenRoute
+        }
+    ) {
+        composable<GenresScreenRoute> {
+            GenresScreen(navController)
+        }
+        composable<MainScreenRoute> {
+            MainScreen()
         }
     }
 }
@@ -101,7 +117,6 @@ fun BottomNavigationBar(
 ) {
     NavigationBar(
         containerColor = InfinityTheme.colors.jet,
-
     ) {
         navigationItems.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -122,16 +137,35 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun AppNavHost(modifier: Modifier, navController: NavHostController) {
-    NavHost(navController = navController, startDestination = HomeScreenRoute) {
-        composable<HomeScreenRoute> {
-            HomeScreen(modifier)
-        }
-        composable<SearchScreenRoute> {
-            SearchScreen(modifier)
-        }
-        composable<ArtistInfoScreenRoute> {
-            ArtistInfoScreen(modifier)
+fun MainScreen() {
+    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val navController = rememberNavController()
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = InfinityTheme.colors.codGray,
+        bottomBar = {
+            BottomNavigationBar(navigationItems, selectedItemIndex, navController) {
+                selectedItemIndex = it
+            }
+        },
+        topBar = {
+            InfinityAppBar(
+                modifier = Modifier,
+                showBackIcon = false,
+                title = stringResource(R.string.app_name)
+            )
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+    ) { innerPadding ->
+        NavHost(navController = navController, startDestination = HomeScreenRoute) {
+            composable<HomeScreenRoute> {
+                HomeScreen(Modifier.padding(innerPadding), navController)
+            }
+            composable<SearchScreenRoute> {
+                SearchScreen(Modifier.padding(innerPadding))
+            }
         }
     }
 }

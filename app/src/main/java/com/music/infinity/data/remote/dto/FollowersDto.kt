@@ -10,8 +10,9 @@ data class FollowersDto(
     val href: String?,
     @SerialName("total")
     val total: Long,
-){
-    fun getFollower() : Followers{
+) {
+
+    fun toFollower(): Followers {
         return Followers(
             href, total
         )

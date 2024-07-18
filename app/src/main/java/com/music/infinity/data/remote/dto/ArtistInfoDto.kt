@@ -32,7 +32,7 @@ class ArtistInfoDto(
 
     fun toArtistInfo() : ArtistInfo{
         return ArtistInfo(
-            externalUrls.toExternalUrls(), followers.getFollower(), genres, href, id, images, name, popularity, type, uri
+            externalUrls.toExternalUrls(), followers.toFollower(), genres, href, id, images, name, popularity, type, uri
         )
     }
 

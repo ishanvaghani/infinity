@@ -11,20 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.music.infinity.R
-import com.music.infinity.common.model.Image
-import com.music.infinity.domain.model.Album
-import com.music.infinity.domain.model.AlbumList
+import com.music.infinity.domain.model.PlaylistList
 import com.music.infinity.presentation.home.models.HomeAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
 @Composable
-fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeAction) -> Unit) {
+fun PlaylistListView(
+    modifier: Modifier,
+    playlistList: PlaylistList,
+    uiAction: (HomeAction) -> Unit
+) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = stringResource(R.string.new_released_albums),
+            text = stringResource(R.string.featured_playlists),
             style = InfinityTheme.typography.t2.copy(
                 color = InfinityTheme.colors.gainsboro,
                 fontWeight = FontWeight.Bold
@@ -35,38 +36,13 @@ fun AlbumListView(modifier: Modifier, albumList: AlbumList, uiAction: (HomeActio
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 8.dp)
         ) {
-            items(albumList.albums, key = { it.id }) {
-                AlbumItemView(
+            items(playlistList.playlists, key = { it.id }) {
+                PlaylistItemView(
                     modifier = Modifier,
-                    album = it,
+                    playlist = it,
                     uiAction = uiAction
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun AlbumListViewPreview() {
-    AlbumListView(
-        modifier = Modifier,
-        albumList = AlbumList(
-            albums = listOf(
-                Album(
-                    "",
-                    emptyList(),
-                    "",
-                    listOf(Image(100, 100, "https://picsum.photos/id/237/200/300")),
-                    "",
-                    "",
-                    0
-                )
-            ),
-            limit = 0,
-            offset = 0,
-            total = 0
-        ),
-        uiAction = {}
-    )
 }

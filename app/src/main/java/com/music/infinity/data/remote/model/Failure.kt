@@ -1,7 +1,7 @@
 package com.music.infinity.data.remote.model
 
-sealed class Failure {
-    class HttpErrorUnauthorized(val message: String) : Failure()
-    class HttpError(val message: String?) : Failure()
-    class GenericError(val message: String?) : Failure()
+sealed class Failure : Throwable() {
+    class HttpErrorUnauthorized(override val message: String) : Failure()
+    class HttpError(override val message: String?) : Failure()
+    class GenericError(override val message: String?) : Failure()
 }
