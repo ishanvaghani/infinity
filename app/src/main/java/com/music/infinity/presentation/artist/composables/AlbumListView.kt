@@ -1,6 +1,5 @@
 package com.music.infinity.presentation.artist.composables
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -59,12 +58,12 @@ fun AlbumListView(modifier: Modifier, albumList: List<ArtistAlbum>, uiAction: (A
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 14.dp)
         ) {
-            Log.e("TAG", "list >>>>>>>>>>>>>>>>>>>> $albumList")
             itemsIndexed(albumList) { index, item ->
                 ArtistAlbumItemView(
                     modifier = Modifier,
                     album = item,
                     addEndMargin = index < albumList.size - 1,
+                    uiAction = uiAction
                 )
             }
         }

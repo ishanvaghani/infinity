@@ -1,4 +1,5 @@
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,12 +28,18 @@ import coil.request.ImageRequest
 import com.music.infinity.R
 import com.music.infinity.domain.model.Artist
 import com.music.infinity.domain.model.ArtistInfo
+import com.music.infinity.presentation.artist.models.ArtistInfoAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
 @Composable
-fun ArtistItemView(modifier: Modifier, artist: ArtistInfo, addEndMargin: Boolean) {
+fun ArtistItemView(modifier: Modifier, artist: ArtistInfo, addEndMargin: Boolean, uiAction : (ArtistInfoAction) -> Unit) {
     Column(
         modifier = modifier
+            .clickable(
+                onClick = {
+                    uiAction(ArtistInfoAction.ArtistClick(artist))
+                }
+            )
             .then(
                 if (addEndMargin) Modifier.padding(end = 16.dp) else Modifier
             ),
@@ -57,10 +64,10 @@ fun ArtistItemView(modifier: Modifier, artist: ArtistInfo, addEndMargin: Boolean
         Text(
             text = artist.name ?: "",
             color = InfinityTheme.colors.white,
-            style = TextStyle(
-                fontSize = 17.sp,
-                fontWeight = FontWeight.W300,
-            )
+            style = InfinityTheme.typography.t3.copy(
+                color = InfinityTheme.colors.mercury,
+                fontWeight = FontWeight.W300
+            ),
         )
 
     }

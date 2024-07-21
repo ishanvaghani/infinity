@@ -25,16 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.music.infinity.R
 import com.music.infinity.domain.model.RelatedArtist
+import com.music.infinity.presentation.artist.models.ArtistInfoAction
 import com.music.infinity.presentation.theme.InfinityTheme
 
 @Composable
-fun ArtistListView(modifier: Modifier, relatedArtist: RelatedArtist?) {
+fun ArtistListView(modifier: Modifier, relatedArtist: RelatedArtist?,
+                   uiAction : (ArtistInfoAction) -> Unit ) {
 
     Column(modifier = modifier.fillMaxWidth()) {
-
-//        Box(modifier = Modifier.size(10.dp).background(Color.Red)) {
-//
-//        }
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -70,6 +68,7 @@ fun ArtistListView(modifier: Modifier, relatedArtist: RelatedArtist?) {
             itemsIndexed(relatedArtist?.artists ?: ArrayList()) { index, item ->
                 ArtistItemView(modifier = modifier, artist = item,
                     addEndMargin = index < ((relatedArtist?.artists?.size?.minus(1)) ?: 0),
+                    uiAction = uiAction
                 )
             }
         }

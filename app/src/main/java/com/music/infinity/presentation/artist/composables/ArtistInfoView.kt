@@ -73,10 +73,11 @@ fun ArtistInfoView(modifier: Modifier, artistInfo: ArtistInfo?, uiAction: (HomeA
             Text(
                 text = artistInfo?.name ?: "",
                 color = InfinityTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                )
+                style = InfinityTheme.typography.t1.copy(
+                    color = InfinityTheme.colors.mercury,
+                    fontWeight = FontWeight.Bold
+                ),
+
             )
 
             Spacer(modifier = Modifier.height(20.dp))
