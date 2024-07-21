@@ -8,6 +8,8 @@ import com.music.infinity.domain.model.Album
 import com.music.infinity.domain.model.Artist
 import com.music.infinity.domain.model.ArtistAlbum
 import com.music.infinity.domain.model.ArtistInfo
+import com.music.infinity.domain.model.ArtistList
+import com.music.infinity.domain.model.RelatedArtist
 import com.music.infinity.domain.repository.ArtistRepository
 
 class ArtistUseCase(private val artistRepository: ArtistRepository) {
@@ -15,8 +17,11 @@ class ArtistUseCase(private val artistRepository: ArtistRepository) {
         return artistRepository.getArtistInfo(artistId)
     }
 
-    suspend fun getArtistAlbum(artistId: String, lstGroups : List<String> , market: String): Either<Failure, List<ArtistAlbum>> {
-        return artistRepository.getArtistAlbumList(artistId, lstGroups, market)
+    suspend fun getArtistAlbum(artistId: String): Either<Failure, List<ArtistAlbum>> {
+        return artistRepository.getArtistAlbumList(artistId)
     }
 
+    suspend fun getRelatedArtist(artistId: String): Either<Failure, RelatedArtist> {
+        return artistRepository.getRelatedArtist(artistId)
+    }
 }

@@ -12,7 +12,7 @@ interface ArtistRepository {
 
     suspend fun getArtistInfo(artistId:String): Either<Failure, ArtistInfo>
 
-    suspend fun getArtistAlbumList(id : String, includeGroups : List<String>, marker: String): Either<Failure, List<ArtistAlbum>>
+    suspend fun getArtistAlbumList(id : String): Either<Failure, List<ArtistAlbum>>
 
     suspend fun getRelatedArtist(id: String): Either<Failure, RelatedArtist>
 

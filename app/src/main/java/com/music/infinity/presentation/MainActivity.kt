@@ -35,10 +35,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.music.infinity.R
 import com.music.infinity.data.local.SharedPrefs
+import com.music.infinity.presentation.artist.ArtistInfoScreen
 import com.music.infinity.presentation.composables.InfinityAppBar
 import com.music.infinity.presentation.genres.GenresScreen
 import com.music.infinity.presentation.home.HomeScreen
 import com.music.infinity.presentation.models.BottomNavigationItem
+import com.music.infinity.presentation.routes.ArtistInfoScreenRoute
 import com.music.infinity.presentation.routes.GenresScreenRoute
 import com.music.infinity.presentation.routes.HomeScreenRoute
 import com.music.infinity.presentation.routes.MainScreenRoute

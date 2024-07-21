@@ -3,5 +3,4 @@ package com.music.infinity.presentation.routes
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object HomeScreenRoute : ScreenRoute
-
+data object ArtistInfoScreenRoute : ScreenRoute
