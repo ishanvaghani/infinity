@@ -29,4 +29,28 @@ object SharedPrefs : KoinComponent {
     fun setSelectedGenres(genres: String) {
         sharedPrefManager.saveString(SharedPrefKeys.SELECTED_GENRES, genres)
     }
+
+    fun addTrackToFavourites(trackId : String){
+        var oldFavData = sharedPrefManager.getString(SharedPrefKeys.FAVOURITES_TRACKS) ?: ""
+        oldFavData = "$oldFavData$trackId,"
+        sharedPrefManager.saveString(SharedPrefKeys.FAVOURITES_TRACKS, oldFavData)
+    }
+
+    fun removeTrackFromFavourites(trackId: String){
+        var oldFavData = sharedPrefManager.getString(SharedPrefKeys.FAVOURITES_TRACKS) ?: ""
+        val startIndex = oldFavData.indexOf(trackId)
+        oldFavData = oldFavData.removeRange(startIndex, startIndex + trackId.length + 2)
+        sharedPrefManager.saveString(SharedPrefKeys.FAVOURITES_TRACKS, oldFavData)
+    }
+
+    fun getFavouritesAllData() : ArrayList<String>{
+        val lstFavouritesData : ArrayList<String> = arrayListOf()
+        val favData = sharedPrefManager.getString(SharedPrefKeys.FAVOURITES_TRACKS) ?: ""
+        lstFavouritesData.addAll(favData.split(","))
+        if(lstFavouritesData.isNotEmpty()){
+            lstFavouritesData.removeLast()
+        }
+        return lstFavouritesData
+    }
+
 }
